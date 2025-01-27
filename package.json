@@ -1,16 +1,14 @@
 {
-  "name": "Mora-AI",
-  "version": "6.0.2",
-  "description": "WhatsApp Bot Multi Device",
+  "name": "Xenovia AI",
+  "version": "1.0.0",
+  "description": "Simple WhatsApp Bot",
   "main": "index.js",
-  "type": "commonjs",
   "directories": {
-    "lib": "lib",
-    "src": "src",
-    "media": "media"
+    "lib": "lib"
   },
   "scripts": {
-    "start": "node index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js --pairing"
   },
   "author": "Khalid",
   "license": "MIT",
