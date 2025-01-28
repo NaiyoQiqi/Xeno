@@ -28,6 +28,9 @@ const dotenv = require('dotenv'); // Tambahkan dotenv
 const util = require('util'); // Untuk menggunakan setTimeout versi Promise
 const setTimeoutPromise = util.promisify(setTimeout); // Membuat setTimeout versi Promise
 
+// Google Generative AI
+const { GoogleGenerativeAI } = require("@google/generative-ai"); 
+
 dotenv.config(); // Memuat variabel dari file .env
 
 const time = moment(new Date()).format('HH:mm:ss DD/MM/YYYY');
@@ -131,17 +134,29 @@ const startWhatsApp = async () => {
         return prepare;
     };
 
+    // Inisialisasi Google Generative AI
+    const apiKey = process.env.GEMINI_API_KEY;
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
+        model: "gemini-2.0-flash-exp",
+    });
+    const generationConfig = {
+        temperature: 1,
+        topP: 0.95,
+        topK: 40,
+        maxOutputTokens: 8192,
+        responseMimeType: "text/plain",
+    };
+
     // Fungsi untuk memanggil API Gemini AI
     const callGeminiAI = async (text) => {
         try {
-            const response = await axios.post('https://api.gemini.ai/endpoint', {
-                text: text
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${process.env.GEMINI_API_KEY}` // Gunakan API key dari environment variable
-                }
+            const chatSession = model.startChat({
+                generationConfig,
+                history: [],
             });
-            return response.data;
+            const result = await chatSession.sendMessage(text);
+            return result.response.text();
         } catch (error) {
             console.error('Error calling Gemini AI:', error);
             return 'Error processing your request';
