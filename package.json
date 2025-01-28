@@ -20,6 +20,7 @@
     "@vitalets/google-translate-api": "^8.0.0",
     "awesome-phonenumber": "^5.9.0",
     "axios": "^1.4.0",
+    "dotenv": "^16.4.5",
     "chalk": "^4.1.2",
     "cheerio": "^1.0.0-rc.12",
     "didyoumean": "^1.2.2",
