@@ -23,9 +23,12 @@ const path = require("path");
 const { Spinner } = clui;
 const { serialize } = require("./lib/myfunc");
 const { color, mylog, infolog } = require("./lib/color");
-const axios = require('axios'); // Tambahkan axios untuk memanggil API
+const axios = require('axios');
+const dotenv = require('dotenv'); // Tambahkan dotenv
 const util = require('util'); // Untuk menggunakan setTimeout versi Promise
 const setTimeoutPromise = util.promisify(setTimeout); // Membuat setTimeout versi Promise
+
+dotenv.config(); // Memuat variabel dari file .env
 
 const time = moment(new Date()).format('HH:mm:ss DD/MM/YYYY');
 
@@ -131,7 +134,13 @@ const startWhatsApp = async () => {
     // Fungsi untuk memanggil API Gemini AI
     const callGeminiAI = async (text) => {
         try {
-            const response = await axios.post('https://api.gemini.ai/endpoint', { text: text });
+            const response = await axios.post('https://api.gemini.ai/endpoint', {
+                text: text
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${process.env.GEMINI_API_KEY}` // Gunakan API key dari environment variable
+                }
+            });
             return response.data;
         } catch (error) {
             console.error('Error calling Gemini AI:', error);
